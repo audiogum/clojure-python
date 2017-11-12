@@ -1,0 +1,3 @@
+target
+test/clojure_python/*.class
+pom.xml
