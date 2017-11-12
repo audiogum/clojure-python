@@ -1,7 +1,7 @@
 (ns clojure-python.core
   (:require [clojure [string :as str]])
-  (:import [org.python.util PythonInterpreter]
-           [org.python.core PyObject Py]))
+  (:import [org.python.core Py PyObject]
+           [org.python.util PythonInterpreter]))
 
 (declare ^:dynamic *interp*)
 
@@ -11,6 +11,14 @@
   (.exec *interp* "import sys")
   (doseq [p libpaths]
     (.exec *interp* (str "sys.path.append('" p "')")))
+  *interp*)
+
+(defn set-encoding
+  "Sets encoding for reading libs"
+  [encoding]
+  (.exec *interp* "import sys")
+  (.exec *interp* "reload(sys)")
+  (.exec *interp* (str "sys.setdefaultencoding('" encoding "')"))
   *interp*)
 
 (defn init
@@ -25,9 +33,10 @@
 
 (defmacro with-interpreter
   "Dynamically bind a new python interpreter for the calling context."
-  [{:keys [libpaths] :as options} & body]
+  [{:keys [libpaths encoding] :as options} & body]
   `(binding [*interp* (PythonInterpreter.)]
      (append-paths ~libpaths)
+     (set-encoding ~encoding)
      ~@body))
 
 (defmacro py-import-lib
