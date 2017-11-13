@@ -1,4 +1,4 @@
-(defproject clojure-python "0.4.2"
+(defproject audiogum/clojure-python "0.4.2-1"
   :description "Improve seamlessness of Clojure Jython interop."
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.python/jython-standalone "2.7.1"]]
